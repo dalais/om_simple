@@ -1,0 +1,10 @@
+{
+    "name": "user/om_simple",
+    "authors": [
+        {
+            "name": "Dalay Salchak",
+            "email": "okeanol777@gmail.com"
+        }
+    ],
+    "require": {}
+}
