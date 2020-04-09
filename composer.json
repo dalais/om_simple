@@ -6,5 +6,7 @@
             "email": "okeanol777@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "fzaninotto/faker": "^1.9"
+    }
 }
