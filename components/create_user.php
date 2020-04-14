@@ -6,31 +6,6 @@ require_once 'db_conn.php';
 
 $faker = Faker\Factory::create('ru_RU');
 
-if (!function_exists("create_or_get_city")) {
-    /**
-     * @param $faker
-     * @param PDO $db_conn
-     * @return int city_id
-     */
-    function create_or_get_city($faker, PDO $db_conn)
-    {
-        $city = $faker->city;
-        // Get random city ID
-        $sth = $db_conn->prepare("SELECT id FROM cities WHERE name=:city");
-        $sth->execute(['city' => $city]);
-        $citiCheck = $sth->fetch(PDO::FETCH_ASSOC);
-
-        if ($citiCheck) {
-            $city_id = $citiCheck['id'];
-        } else {
-            $sth = $db_conn->prepare("INSERT INTO cities (name) VALUES (:name)");
-            $sth->execute(['name' => $city]);
-            $city_id = $db_conn->lastInsertId();
-        }
-
-        return (int)$city_id;
-    }
-}
 
 if (!function_exists("add_skills_for_created_user")) {
 
@@ -75,11 +50,11 @@ if (!function_exists('create_user')) {
     function create_user($faker, PDO $db_conn)
     {
         // Create user
-        $city_id = create_or_get_city($faker, $db_conn);
+        if ($_POST['name'] !== '' && $_POST['city_id'] !== null)
         $sth = $db_conn->prepare("INSERT INTO users (name, city_id) VALUES (:name,:city_id)");
         $sth->execute([
-            'name' => $faker->name('male'),
-            'city_id' => $city_id
+            'name' => $_POST['name'],
+            'city_id' => (int)$_POST['city_id']
         ]);
 
         // add skills for new user
