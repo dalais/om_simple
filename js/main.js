@@ -58,6 +58,7 @@ function generateUserData(file, req) {
                 }
             }
         };
+        req.setRequestHeader('Content-Type', 'application/json');
         req.send(null);
     }
 }
@@ -106,19 +107,19 @@ function getUsersAsync(file, req) {
     if (req !== undefined) {
         try {
             req.open("GET", file, true);
+            req.onreadystatechange = function () {
+                if (req.readyState === 4) {
+                    if (req.status === 200 || req.status === 0) {
+                        usersList(req.responseText);
+                    }
+                }
+            };
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(null);
         } catch (err) {
             console.log("Невозможно выполнить запрос.\\n\\n" + err.message);
             return false;
         }
-
-        req.onreadystatechange = function () {
-            if (req.readyState === 4) {
-                if (req.status === 200 || req.status === 0) {
-                    usersList(req.responseText);
-                }
-            }
-        };
-        req.send(null);
     }
 }
 
